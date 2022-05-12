@@ -1,35 +1,63 @@
-﻿using noam2.Model;
+﻿using noam2.Controllers;
+using noam2.Model;
 
-namespace noam2.Controllers
+namespace noam2.Service
 {
+
+
+
+
     public class ContactsService : IContactsService
     {
-        public int CreateContact(string connectContactId, Contact contact)
-        {
-            throw new NotImplementedException();
-        }
 
-        public int CreateMessage(string connectContactId, string destContactId, Message message)
-        {
-            throw new NotImplementedException();
-        }
 
-        public int DeleteContact(string connectContactId, string contactId)
-        {
-            throw new NotImplementedException();
-        }
+        User yossi = new User() { 
+            Id = "yossi", 
+            Name = "yos", 
+            Password = "123456789", 
+            Server = "local1234", 
+            Contacts = new List<Contact> { }
+        };
 
-        public int DeleteMessageById(string connectContactId, string destContactId, int messageId)
+        User noam = new User()
         {
-            throw new NotImplementedException();
+            Id = "noam",
+            Name = "nono",
+            Password = "123456789",
+            Server = "local1234",
+            Contacts = new List<Contact> { }
+        };
+
+
+
+        public Contact noamTheContact = new Contact()
+        {
+            Id = "noam",
+            Name = "nono",
+            Server = "localHost 123",
+            Last = "",
+            Lastdate = ""
+        };
+
+        private static readonly List<User> _users = new List<User>() { };
+
+        private static readonly List<Chat> _chats = new List<Chat>(){
+            new Chat(){Id=1,
+                       Contacts=new List<string>(){"yossi","noamTheContact" },
+                       Messages = new List<Message>(){new Message(){Id=1,Content="hello itay",Sender="yossi",Type="text", Date="10:10"}
+                       }
+            }
+        };
+
+        public ContactsService()
+        {
+            _users.Add(yossi);
+            _users.Add(noam);
+            yossi.Contacts.Add(noamTheContact);
+
         }
 
         public List<Contact> GetAllContacts(string connectId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Message> GetAllMessages(string connectContactId, string destContactId)
         {
             throw new NotImplementedException();
         }
@@ -39,7 +67,7 @@ namespace noam2.Controllers
             throw new NotImplementedException();
         }
 
-        public Message GetMessageById(string connectContactId, string destContactId, int messageId)
+        public int CreateContact(string connectContactId, Contact contact)
         {
             throw new NotImplementedException();
         }
@@ -49,7 +77,32 @@ namespace noam2.Controllers
             throw new NotImplementedException();
         }
 
+        public int DeleteContact(string connectContactId, string contactId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CreateMessage(string connectContactId, string destContactId, Message message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Message GetMessageById(string connectContactId, string destContactId, int messageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Message> GetAllMessages(string connectContactId, string destContactId)
+        {
+            throw new NotImplementedException();
+        }
+
         public int UpdateMessageById(string connectContactId, string destContactId, int messageId, Message message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int DeleteMessageById(string connectContactId, string destContactId, int messageId)
         {
             throw new NotImplementedException();
         }
