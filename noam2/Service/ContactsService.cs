@@ -43,8 +43,9 @@ namespace noam2.Service
 
         private static readonly List<Chat> _chats = new List<Chat>(){
             new Chat(){Id=1,
-                       Contacts=new List<string>(){"yossi","noamTheContact" },
-                       Messages = new List<Message>(){new Message(){Id=1,Content="hello itay",Sender="yossi",Type="text", Date="10:10"}
+                       User1="yossi",
+                       User2="noamTheContact" ,
+                       Messages = new List<Message>(){new Message(){Id=1,Content="hello itay",Sent="yossi", Created="10:10"}
                        }
             }
         };
