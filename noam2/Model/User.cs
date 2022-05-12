@@ -2,19 +2,19 @@
 
 namespace noam2.Model
 {
-    public class Contact
+    public class User
     {
         [Key]
         public string Id { get; set; }
-
         [Required]
         public string Name { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [Required]
         public string Server { get; set; }
         [Required]
-        public string Last { get; set; } = "";
-        [Required]
-        public string Lastdate { get; set; } = "";
+        public List<Contact> Contacts { get; set; }
     }
 }

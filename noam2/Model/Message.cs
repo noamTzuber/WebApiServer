@@ -11,11 +11,9 @@ namespace noam2.Model
         [Required]
         public string Content { get; set; }
         [Required]
-        public string Sender { get; set; }
+        public string Sent { get; set; }
         [Required]
-        public string Type { get; set; }
-
-        public string Date { get; set; }
+        public string Created { get; set; }
 
 
 
