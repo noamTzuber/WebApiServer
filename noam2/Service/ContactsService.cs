@@ -64,55 +64,54 @@ namespace noam2.Service
 
             yossi.Contacts.Add(itay);
             yossi.Contacts.Add(noam);
-
         }
 
-        public int CreateContact(Contact contact)
+        public List<Contact> GetAllContacts(string connectId)
         {
             throw new NotImplementedException();
         }
 
-        public int CreateMessage(string contactId1, string contactId2, Message message)
+        public Contact GetContact(string connectContactId, string contactId)
         {
             throw new NotImplementedException();
         }
 
-        public int DeleteContact(string id)
+        public int CreateContact(string connectContactId, Contact contact)
         {
             throw new NotImplementedException();
         }
 
-        public int DeleteMessageByChatId(string contactId1, string contactId2, int messageId)
+        public int UpdateContact(string connectContactId, Contact contact)
         {
             throw new NotImplementedException();
         }
 
-        public List<Contact> GetAllContacts()
+        public int DeleteContact(string connectContactId, string contactId)
         {
             throw new NotImplementedException();
         }
 
-        public List<Message> GetAllMessagesByID(string contactId1, string contactId2)
+        public int CreateMessage(string connectContactId, string destContactId, Message message)
         {
             throw new NotImplementedException();
         }
 
-        public Contact GetContact(string id)
+        public Message GetMessageById(string connectContactId, string destContactId, int messageId)
         {
             throw new NotImplementedException();
         }
 
-        public Message GetMessageByID(string contactId1, string contactId2, int messageId)
+        public List<Message> GetAllMessages(string connectContactId, string destContactId)
         {
             throw new NotImplementedException();
         }
 
-        public int UpdateContact(Contact contact)
+        public int UpdateMessageById(string connectContactId, string destContactId, int messageId, Message message)
         {
             throw new NotImplementedException();
         }
 
-        public int UpdateMessageByChatId(string contactId1, string contactId2, int messageId, Message message)
+        public int DeleteMessageById(string connectContactId, string destContactId, int messageId)
         {
             throw new NotImplementedException();
         }

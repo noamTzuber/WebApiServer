@@ -16,11 +16,28 @@ namespace noam2.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public List<Contact> GetAllContacts(string id)
+        private string GetConnectedId()
         {
-           return _contactsService.GetAllContacts();
+            return "yossi";
+        }
 
+        [HttpPost]
+        public  void  CreateContact([Bind("Id,Name,Server,Password,Img, Contacts")] Contact contact)
+        {
+            _contactsService.CreateContact(GetConnectedId(), contact);
+        }
+
+        [HttpGet]
+        public List<Contact> GetAllContacts( string id)
+        {
+           return _contactsService.GetAllContacts(GetConnectedId());
+
+        }
+
+        [HttpGet("{id}")]
+        public Contact GetContact(string id)
+        {
+            return _contactsService.GetContact(GetConnectedId(), id);
         }
     }
 }
