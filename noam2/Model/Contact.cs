@@ -24,6 +24,6 @@ namespace noam2.Model
 
         public string Img { get; set; }
 
-        public List<int> Chats { get; set; }
+        public List<Contact> Contacts { get; set; }
     }
 }

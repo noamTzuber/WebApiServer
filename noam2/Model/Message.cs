@@ -15,6 +15,8 @@ namespace noam2.Model
         [Required]
         public string Type { get; set; }
 
+        public string Date { get; set; }
+
 
 
 

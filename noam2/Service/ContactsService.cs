@@ -9,36 +9,63 @@ namespace noam2.Service
       
     public class ContactsService : IContactsService
     {
-        private static readonly List<Chat> _chats = new List<Chat>(){
-            new Chat(){Id=1,
-                       Contacts=new List<string>(){"noam","itay" },
-                       Messages = new List<Message>(){new Message(){Id=1,Content="hello",Sender="noam",Type="text"}
-                       }
-        }};
-
-        private static readonly List<Contact> _contacts = new List<Contact>()
-        {
-        };
-        private Contact yossi = new()
+        public Contact yossi = new Contact()
         {
             Id = "yossi",
             Name = "yo",
             Server = "localHost 123",
             Password = "12345678",
             Img = "aaa",
-            Chats = new List<int>() { }
+            Contacts = new List<Contact>() { }
         };
-        private Contact itay = new Contact()
+        public Contact itay = new Contact()
         {
             Id = "itay",
             Name = "iti",
             Server = "localHost 123",
             Password = "12345678",
             Img = "aaa",
-            Chats = new List<int>() { 1 }
+            Contacts = new List<Contact>() { }
         };
 
-     
+        public Contact noam = new Contact()
+        {
+            Id = "noam",
+            Name = "nono",
+            Server = "localHost 123",
+            Password = "12345678",
+            Img = "aaa",
+            Contacts = new List<Contact>() {}
+        };
+
+        private static readonly List<Contact> _contacts = new List<Contact>(){};
+
+
+        private static readonly List<Chat> _chats = new List<Chat>(){
+            new Chat(){Id=1,
+                       Contacts=new List<string>(){"yossi","itay" },
+                       Messages = new List<Message>(){new Message(){Id=1,Content="hello itay",Sender="yossi",Type="text", Date="10:10"}
+                       }        
+            },
+             new Chat(){Id=2,
+                       Contacts=new List<string>(){"yossi","noam" },
+                       Messages = new List<Message>(){new Message(){Id=2,Content="hello yossi",Sender="noam",Type="text", Date="12:50"}
+                       }
+            }
+        };
+        
+           public ContactsService()
+        {
+
+            _contacts.Add(yossi);
+            _contacts.Add(noam);
+            _contacts.Add(itay);
+
+
+            yossi.Contacts.Add(itay);
+            yossi.Contacts.Add(noam);
+
+        }
 
         public int CreateContact(Contact contact)
         {
