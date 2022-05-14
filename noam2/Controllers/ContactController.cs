@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using noam2.Model;
+using noam2.Service;
 
 namespace noam2.Controllers
 {
@@ -21,7 +22,7 @@ namespace noam2.Controllers
         [HttpPost]
         public ActionResult CreateContact([Bind("Id,Name,Server,Last,Lastdate")] Contact contact)
         {
-            return Json(_contactsService.CreateContact(GetConnectedId(),contact));
+            return Json(_contactsService.CreateContact(GetConnectedId(), contact));
         }
 
         // Get: Contact/
@@ -35,7 +36,7 @@ namespace noam2.Controllers
         [HttpGet("{id}")]
         public ActionResult GetContact(string id)
         {
-            return Json(_contactsService.GetContact(GetConnectedId(),id));
+            return Json(_contactsService.GetContact(GetConnectedId(), id));
         }
 
         // Put: Contact/{id}
@@ -53,14 +54,14 @@ namespace noam2.Controllers
         }
 
         //************************************** Messages ******************************************//
-        
-        
+
+
 
         // Post: Contact/{id}/messages
         [HttpPost("{id}/messages")]
-        public ActionResult CreateMessage(string id,[Bind("Id,Contaent,Sent,Created")] Message message)
+        public ActionResult CreateMessage(string id, [Bind("Id,Contaent,Sent,Created")] Message message)
         {
-            return Json(_contactsService.CreateMessage(GetConnectedId(),id, message));
+            return Json(_contactsService.CreateMessage(GetConnectedId(), id, message));
         }
 
         // Get: Contact/{id}/messages/{id2}
@@ -69,8 +70,8 @@ namespace noam2.Controllers
         {
             return Json(_contactsService.GetMessageById(GetConnectedId(), id, id2));
         }
-       
-        
+
+
         // Get: Contact/{id}/messages
         [HttpGet("{id}/messages")]
         public ActionResult GetAllMessages(string id)
@@ -78,11 +79,11 @@ namespace noam2.Controllers
             return Json(_contactsService.GetAllMessages(GetConnectedId(), id));
         }
 
-       
+
         [HttpPut("{id}/messages/{id2}")]
         public ActionResult UpdateMessageById(string id, int id2, [Bind("Id,Contaent,Sent,Created")] Message message)
         {
-            return Json(_contactsService.UpdateMessageById(GetConnectedId(), id, id2,message));
+            return Json(_contactsService.UpdateMessageById(GetConnectedId(), id, id2, message));
         }
 
         [HttpDelete("{id}/messages/{id2}")]
