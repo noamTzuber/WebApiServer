@@ -36,8 +36,7 @@ namespace noam2.Controllers
             public string Id { get; set; }
             public string Name { get; set; }
             public string Server { get; set; }
-            public string Last { get; set; } = "";
-            public string Lastdate { get; set; } = "";
+
         }
 
         
@@ -48,33 +47,36 @@ namespace noam2.Controllers
           
         }
 
-        public class JsonResponse
+        private string whoConnected()
         {
-
+            return "yossi";
         }
+
+
 
         //************************************** Contacts ******************************************//
 
         // Post: Contact/
         [HttpPost]
-        public ActionResult CreateContact([Bind("ConnectedId,Id,Name,Server,Last,Lastdate")] ContactCreate contactCreate)
+        public ActionResult CreateContact([Bind("ConnectedId,Id,Name,Server")] ContactCreate contactCreate)
         {
-            return Json(_contactsService.CreateContact(contactCreate.ConnectedId,
-                new Contact() { Id = contactCreate.Id, Name = contactCreate.Name, Server = contactCreate.Server, Last = contactCreate.Last, Lastdate = contactCreate.Lastdate }));
+            Contact contact = new Contact() { Id = contactCreate.Id, Name = contactCreate.Name, Server = contactCreate.Server, Last = "", Lastdate = "" };
+            return Json(_contactsService.CreateContact(contactCreate.ConnectedId, contact));
+                
         }
 
         // Get: Contact/
         [HttpGet]
-        public ActionResult GetAllContacts([Bind("ConnectedId")] ConnectedId connectedId)
+        public ActionResult GetAllContacts()
         {
-            return Json(_contactsService.GetAllContacts(connectedId.connectedId));
+            return Json(_contactsService.GetAllContacts(whoConnected()));
         }
 
         // Get: Contact/{id}
         [HttpGet("{id}")]
-        public ActionResult GetContact(string id, [Bind("ConnectedId")] ConnectedId connectedId)
+        public ActionResult GetContact(string id)
         {
-            return Json(_contactsService.GetContact(connectedId.connectedId, id));
+            return Json(_contactsService.GetContact(whoConnected(), id));
         }
 
         // Put: Contact/{id}
@@ -104,17 +106,17 @@ namespace noam2.Controllers
 
         // Get: Contact/{id}/messages/{id2}
         [HttpGet("{id}/messages/{id2}")]
-        public ActionResult GetMessageById(string id, int id2, [Bind("ConnectedId")] ConnectedId connectedId)
+        public ActionResult GetMessageById(string id, int id2)
         {
-            return Json(_contactsService.GetMessageById(connectedId.connectedId, id, id2));
+            return Json(_contactsService.GetMessageById(whoConnected(), id, id2));
         }
 
 
         // Get: Contact/{id}/messages
         [HttpGet("{id}/messages")]
-        public ActionResult GetAllMessages([Bind("ConnectedId")] ConnectedId connectedId,string id)
+        public ActionResult GetAllMessages(string id)
         {
-            return Json(_contactsService.GetAllMessages(connectedId.connectedId, id));
+            return Json(_contactsService.GetAllMessages(whoConnected(), id));
         }
 
 
