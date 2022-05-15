@@ -1,4 +1,5 @@
 ﻿using noam2.Model;
+using static noam2.Controllers.ContactController;
 
 namespace noam2.Controllers
 {
@@ -7,15 +8,15 @@ namespace noam2.Controllers
         //Contacts
         public List<Contact> GetAllContacts(string connectId);
         public Contact GetContact(string connectContactId, string contactId);
-        public int CreateContact(string connectContactId, Contact contact);
-        public int UpdateContact(string connectContactId, Contact contact);
+        public int CreateContact(string connectedId, Contact contact);
+        public int UpdateContact(string connectContactId, string destId, string Name, string Server);
         public int DeleteContact(string connectContactId, string contactId);
 
         // Messages
-        public int CreateMessage(string connectContactId, string destContactId, Message message);
+        public int CreateMessage(string connectContactId, string destContactId, string content);
         public Message GetMessageById(string connectContactId, string destContactId, int messageId);
         public List<Message> GetAllMessages(string connectContactId, string destContactId);
-        public int UpdateMessageById(string connectContactId,  string destContactId, int messageId, Message message);
+        public int UpdateMessageById(string connectContactId,  string destContactId, int messageId, string message);
         public int DeleteMessageById(string connectContactId, string destContactId, int messageId);
 
     }
