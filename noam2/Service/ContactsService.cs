@@ -61,17 +61,24 @@ namespace noam2.Service
 
         public List<Contact> GetAllContacts(string connectContactId)
         {
+         
             return _users.FirstOrDefault(u => u.Id == connectContactId).Contacts;
         }
 
         public Contact GetContact(string connectContactId, string contactId)
+
+
         {
              return _users.FirstOrDefault(u => u.Id == connectContactId).Contacts.FirstOrDefault(c => c.Id == contactId);
         }
 
         public int CreateContact(string connectedId,Contact contact)
         {
-            _users.FirstOrDefault(u => u.Id == connectedId).Contacts.Add(contact);
+            if ( _users.Exists(u => u.Id == connectedId))
+            {
+                _users.FirstOrDefault(u => u.Id == connectedId).Contacts.Add(contact);
+                return 1;
+            }
             return 0;
             
         }

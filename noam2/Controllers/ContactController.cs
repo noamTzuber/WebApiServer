@@ -61,14 +61,20 @@ namespace noam2.Controllers
         public ActionResult CreateContact([Bind("ConnectedId,Id,Name,Server")] ContactCreate contactCreate)
         {
             Contact contact = new Contact() { Id = contactCreate.Id, Name = contactCreate.Name, Server = contactCreate.Server, Last = "", Lastdate = "" };
-            return Json(_contactsService.CreateContact(contactCreate.ConnectedId, contact));
-                
+            int isCreates=_contactsService.CreateContact(contactCreate.ConnectedId, contact);
+            if (isCreates == 1)
+            {
+                return NoContent();
+            }
+            return StatusCode(401);
+
         }
 
         // Get: Contact/
         [HttpGet]
         public ActionResult GetAllContacts()
         {
+            
             return Json(_contactsService.GetAllContacts(whoConnected()));
         }
 
@@ -76,21 +82,36 @@ namespace noam2.Controllers
         [HttpGet("{id}")]
         public ActionResult GetContact(string id)
         {
-            return Json(_contactsService.GetContact(whoConnected(), id));
+            Contact contact = _contactsService.GetContact(whoConnected(), id);
+            if (contact == null)
+            {
+                return NotFound();
+            }
+            return Json(contact);
         }
 
         // Put: Contact/{id}
         [HttpPut("{id}")]
         public ActionResult UpdateContact(string id,[Bind("ConnectedId,Name,Server")] ContactUpdateData contactUpdateData)
         {
-            return Json(_contactsService.UpdateContact(contactUpdateData.ConnectedId,id,contactUpdateData.Name,contactUpdateData.Server));
+            int isUpdate=_contactsService.UpdateContact(contactUpdateData.ConnectedId, id, contactUpdateData.Name, contactUpdateData.Server);
+           if (isUpdate == 1)
+            {
+                return NoContent();
+            }
+            return StatusCode(401);
         }
 
         // Delete: Contact/{id}
         [HttpDelete("{id}")]
         public ActionResult DeleteContact(string id, [Bind("ConnectedId")] ConnectedId connectedId)
         {
-            return Json(_contactsService.DeleteContact(connectedId.connectedId, id));
+            int isDelete= _contactsService.DeleteContact(connectedId.connectedId, id);
+            if (isDelete == 1)
+            {
+                return NoContent();
+            }
+            return StatusCode(401);
         }
 
         //************************************** Messages ******************************************//
@@ -101,14 +122,24 @@ namespace noam2.Controllers
         [HttpPost("{id}/messages")]
         public ActionResult CreateMessage(string id, [Bind("ConnectedId,Content")] MessageData createMessage)
         {
-            return Json(_contactsService.CreateMessage(createMessage.ConnectedId, id, createMessage.Content));
+            int isCreated= _contactsService.CreateMessage(createMessage.ConnectedId, id, createMessage.Content);
+            if (isCreated == 1)
+            {
+                return StatusCode(201);
+            }
+            return StatusCode(401);
         }
 
         // Get: Contact/{id}/messages/{id2}
         [HttpGet("{id}/messages/{id2}")]
         public ActionResult GetMessageById(string id, int id2)
         {
-            return Json(_contactsService.GetMessageById(whoConnected(), id, id2));
+            Message message=_contactsService.GetMessageById(whoConnected(), id, id2);
+            if (message != null)
+            {
+                return Json(message);
+            }
+            return NotFound();
         }
 
 
@@ -116,20 +147,35 @@ namespace noam2.Controllers
         [HttpGet("{id}/messages")]
         public ActionResult GetAllMessages(string id)
         {
-            return Json(_contactsService.GetAllMessages(whoConnected(), id));
+            List<Message> messages=_contactsService.GetAllMessages(whoConnected(), id);
+            if (messages != null)
+            {
+                return Json(messages);
+            }
+            return StatusCode(401);
         }
 
 
         [HttpPut("{id}/messages/{id2}")]
         public ActionResult UpdateMessageById(string id, int id2, [Bind("ConnectedId,Content")] MessageData message)
         {
-            return Json(_contactsService.UpdateMessageById(message.ConnectedId, id, id2, message.Content));
+            int isUpdate=_contactsService.UpdateMessageById(message.ConnectedId, id, id2, message.Content);
+            if (isUpdate == 1)
+            {
+                return NoContent();
+            }
+            return NotFound();
         }
 
         [HttpDelete("{id}/messages/{id2}")]
         public ActionResult DeleteMessageById([Bind("ConnectedId")] ConnectedId connectedId,string id, int id2)
         {
-            return Json(_contactsService.DeleteMessageById(connectedId.connectedId, id, id2));
+            int isDelete= _contactsService.DeleteMessageById(connectedId.connectedId, id, id2);
+            if (isDelete == 1)
+            {
+                return NoContent();
+            }
+            return StatusCode(401);
         }
 
     }
