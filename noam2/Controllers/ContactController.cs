@@ -75,7 +75,12 @@ namespace noam2.Controllers
         public ActionResult GetAllContacts()
         {
             
-            return Json(_contactsService.GetAllContacts(whoConnected()));
+            List<Contact> contacts=_contactsService.GetAllContacts(whoConnected());
+            if(contacts == null)
+            {
+                return StatusCode(401);
+            }
+            return Json(contacts);
         }
 
         // Get: Contact/{id}

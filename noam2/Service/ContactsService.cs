@@ -61,8 +61,12 @@ namespace noam2.Service
 
         public List<Contact> GetAllContacts(string connectContactId)
         {
-         
-            return _users.FirstOrDefault(u => u.Id == connectContactId).Contacts;
+            if (_users.Exists(u => u.Id == connectContactId))
+            {
+                return _users.FirstOrDefault(u => u.Id == connectContactId).Contacts;
+            }
+
+            return null;
         }
 
         public Contact GetContact(string connectContactId, string contactId)
@@ -85,38 +89,66 @@ namespace noam2.Service
 
         public int UpdateContact(string connectContactId,string destId,string Name,string Server)
         {
+            
             Contact c = _users.FirstOrDefault(u => u.Id == connectContactId).Contacts.FirstOrDefault(c => c.Id ==destId);
+            if(c == null)
+            {
+                return 0;
+            }
             c.Name = Name;
             c.Server = Server;
-            return 0;
+            return 1;
 
         }
 
         public int DeleteContact(string connectContactId, string contactId)
         {
+     
+            
+            Contact contact =_users.FirstOrDefault(u => u.Id == connectContactId).Contacts.FirstOrDefault(u=>u.Id==contactId);
+            if (contact == null)
+            {
+                return 0;
+            }
+
             _users.FirstOrDefault(u => u.Id == connectContactId).Contacts.Remove(GetContact(connectContactId, contactId));
-            return 0;
+            return 1;
         }
 
         public int CreateMessage(string connectContactId, string destContactId,string content)
         {
             Chat chat=_chats.FirstOrDefault(c => (c.User1 == connectContactId && c.User2 == destContactId) || c.User2 == connectContactId && c.User1 == destContactId);
+            if (chat == null)
+            {
+                return 0;
+            }
+
             int id = chat.Messages.Count() + 1;
             bool sent = chat.User1 == connectContactId;
             Message message = new() { Id = id, Sent = sent, Created = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff"), Content = content };
             chat.Messages.Add(message);
-            
-            return 0;
+            return 1;
         }
 
         public Message GetMessageById(string connectContactId, string destContactId, int messageId)
         {
             Chat chat = _chats.FirstOrDefault(c => (c.User1 == connectContactId && c.User2 == destContactId) || c.User2 == connectContactId && c.User1 == destContactId);
+            if (chat == null)
+            {
+                return null;
+            }
+
             Message message= chat.Messages.FirstOrDefault(m => m.Id == messageId);
+            if (message == null)
+            {
+                return null;
+            }
+
             if (chat.User1== connectContactId)
             {
                 return message;
             }
+            // for changing the sent fiels to the oposite value
             return new Message() { Id = messageId, Content = message.Content, Created = message.Created, Sent = false };
             }
             
@@ -125,10 +157,18 @@ namespace noam2.Service
         public List<Message> GetAllMessages(string connectContactId, string destContactId)
         {
         Chat chat = _chats.FirstOrDefault(c => (c.User1 == connectContactId && c.User2 == destContactId) || c.User2 == connectContactId && c.User1 == destContactId);
-        if (chat.User1 == connectContactId)
+            if (chat == null)
+            {
+                return null;
+            }
+
+
+            if (chat.User1 == connectContactId)
             {
                 return chat.Messages;
             }
+
+            // for changing the sent fiels to the oposite value
             List<Message> messages =new List<Message>();
                 foreach (Message message in chat.Messages) {
                     messages.Add(new Message() { Id = message.Id, Content = message.Content, Created = message.Created, Sent = !message.Sent });
@@ -138,16 +178,40 @@ namespace noam2.Service
 
         public int UpdateMessageById(string connectContactId, string destContactId, int messageId, string message)
         {
-            Message m = _chats.FirstOrDefault(c => (c.User1 == connectContactId && c.User2 == destContactId) || c.User2 == connectContactId && c.User1 == destContactId).Messages.FirstOrDefault(m => m.Id == messageId);
-            m.Content = message;
+            Chat chat = _chats.FirstOrDefault(c => (c.User1 == connectContactId && c.User2 == destContactId) || c.User2 == connectContactId && c.User1 == destContactId);
+            if (chat == null)
+            {
+                return 0;
+            };
+
+            Message mess = chat.Messages.FirstOrDefault(m => m.Id == messageId);
+
+            if (mess == null)
+            {
+                return 0;
+            }
+            mess.Content = message;
             return 0;
 
         }
 
         public int DeleteMessageById(string connectContactId, string destContactId, int messageId)
         {
-            _chats.FirstOrDefault(c => (c.User1 == connectContactId && c.User2 == destContactId) || c.User2 == connectContactId && c.User1 == destContactId).Messages.Remove(GetMessageById(connectContactId, destContactId, messageId));
-            return 0;
+           Chat chat=_chats.FirstOrDefault(c => (c.User1 == connectContactId && c.User2 == destContactId) || c.User2 == connectContactId && c.User1 == destContactId);
+            if (chat == null)
+            {
+                return 0;
+            };
+
+            Message message =chat.Messages.FirstOrDefault(m=>m.Id == messageId);
+            if (message == null)
+            {
+                return 0;
+            };
+
+            chat.Messages.Remove(GetMessageById(connectContactId, destContactId, messageId));
+
+            return 1;
         }
     }
 }
