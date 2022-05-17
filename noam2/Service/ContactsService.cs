@@ -1,4 +1,5 @@
-﻿using noam2.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using noam2.Controllers;
 using noam2.Model;
 using static noam2.Controllers.ContactController;
 
@@ -44,11 +45,17 @@ namespace noam2.Service
 
         private static readonly List<Chat> _chats = new List<Chat>(){
             new Chat(){Id=1,
-                       User1="yossi",
-                       User2="noam" ,
-                       Messages = new List<Message>(){new Message(){Id=1,Content="hello itay",Sent=true, Created="10:10"}
+                       User1="harry",
+                       User2="yossi" ,
+                       Messages = new List<Message>(){new Message(){Id=1,Content="hello harry",Sent=true, Created="10:10"}
                        }
-            }
+                       },
+            new Chat(){Id=2,
+                       User1="yossi",
+                       User2="ron" ,
+                       Messages = new List<Message>(){new Message(){Id=1,Content="hello ron",Sent=true, Created="10:10"}
+                       }
+                       }
         };
 
         public ContactsService()
@@ -212,6 +219,21 @@ namespace noam2.Service
             chat.Messages.Remove(GetMessageById(connectContactId, destContactId, messageId));
 
             return 1;
+        }
+
+        /////////////////////////////////////////////////////////////
+        ///
+
+        public User GetUser(string id)
+        {
+            foreach (var user in _users)
+            {
+                if (user.Id == id)
+                {
+                    return user;
+                }
+            }
+            return null;
         }
     }
 }

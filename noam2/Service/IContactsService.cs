@@ -19,5 +19,10 @@ namespace noam2.Controllers
         public int UpdateMessageById(string connectContactId,  string destContactId, int messageId, string message);
         public int DeleteMessageById(string connectContactId, string destContactId, int messageId);
 
+        ////////////////////////////////////////
+        ///
+        public User GetUser(string id);
+
+
     }
 }
