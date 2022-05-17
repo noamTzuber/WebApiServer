@@ -235,5 +235,10 @@ namespace noam2.Service
             }
             return null;
         }
+
+        public List<Chat> GetChats(string id)
+        {
+            return _chats;
+        }
     }
 }

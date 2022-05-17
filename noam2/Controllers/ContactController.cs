@@ -185,15 +185,23 @@ namespace noam2.Controllers
 
 
         // Get: Contact/User/{id}
-        [HttpGet("User/{id}")]
-        public ActionResult GetUser(string id)
+        [HttpGet("User")]
+        public ActionResult GetUser()
         {
-            User user = _contactsService.GetUser(id);
+            User user = _contactsService.GetUser(whoConnected());
             if (user != null)
             {
                 return Json(user);
             }
             return NotFound();
+        }
+
+        // Get: Contact/User
+        [HttpGet("Chats")]
+        public ActionResult GetChats()
+        {
+            return Json( _contactsService.GetChats(whoConnected()));
+           
         }
 
 
