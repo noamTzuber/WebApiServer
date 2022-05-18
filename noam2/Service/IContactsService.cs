@@ -22,6 +22,9 @@ namespace noam2.Controllers
         ////////////////////////////////////////
         ///
         public User GetUser(string id);
+        public List<User> GetAllUsers();
+
+        public int CreateUser(User user);
 
         public List<Chat> GetChats(string id);
 

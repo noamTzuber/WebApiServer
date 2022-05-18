@@ -184,7 +184,7 @@ namespace noam2.Controllers
         }
 
 
-        // Get: Contact/User/{id}
+        // Get: Contact/User
         [HttpGet("User")]
         public ActionResult GetUser()
         {
@@ -196,6 +196,16 @@ namespace noam2.Controllers
             return NotFound();
         }
 
+        // Get: Contact/AllUsers
+        [HttpGet("AllUsers")]
+        public ActionResult GetAllUsers()
+        {
+            return Json(_contactsService.GetAllUsers());
+            
+        }
+
+
+
         // Get: Contact/User
         [HttpGet("Chats")]
         public ActionResult GetChats()
@@ -203,6 +213,21 @@ namespace noam2.Controllers
             return Json( _contactsService.GetChats(whoConnected()));
            
         }
+
+
+        // Post: Contact/User
+        [HttpPost("User")]
+        public ActionResult CreateUser([Bind("Id,Name,Password, Server, Contacts")] User user)
+        {
+            int isCreates = _contactsService.CreateUser(user);
+            if (isCreates == 1)
+            {
+                return NoContent();
+            }
+            return StatusCode(401);
+
+        }
+
 
 
     }

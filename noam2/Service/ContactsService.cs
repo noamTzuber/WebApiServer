@@ -37,7 +37,15 @@ namespace noam2.Service
             Id = "noam",
             Name = "nono",
             Server = "localHost 123",
-            Last = "",
+            Last = "22",
+            Lastdate = ""
+        };
+        public Contact itayTheContact = new Contact()
+        {
+            Id = "itay",
+            Name = "itay",
+            Server = "localHost 123",
+            Last = "11",
             Lastdate = ""
         };
 
@@ -45,15 +53,15 @@ namespace noam2.Service
 
         private static readonly List<Chat> _chats = new List<Chat>(){
             new Chat(){Id=1,
-                       User1="harry",
+                       User1="noam",
                        User2="yossi" ,
                        Messages = new List<Message>(){new Message(){Id=1,Content="hello harry",Sent=true, Created="10:10"}
                        }
                        },
             new Chat(){Id=2,
                        User1="yossi",
-                       User2="ron" ,
-                       Messages = new List<Message>(){new Message(){Id=1,Content="hello ron",Sent=true, Created="10:10"}
+                       User2="itay" ,
+                       Messages = new List<Message>(){new Message(){Id=1,Content="hello ron",Sent=false, Created="10:10"}
                        }
                        }
         };
@@ -63,6 +71,7 @@ namespace noam2.Service
             _users.Add(yossi);
             _users.Add(noam);
             yossi.Contacts.Add(noamTheContact);
+            yossi.Contacts.Add(itayTheContact);
 
         }
 
@@ -236,9 +245,22 @@ namespace noam2.Service
             return null;
         }
 
+        public List<User> GetAllUsers()
+        {
+            return _users;
+        }
+
         public List<Chat> GetChats(string id)
         {
             return _chats;
         }
+
+        public int CreateUser(User user)
+        {
+            _users.Add(user);
+   
+            return 1;
+        }
+
     }
 }
