@@ -105,7 +105,7 @@ namespace noam2.Service
         public int CreateContact(string connectedId,Contact contact)
         {
             
-            if ( _users.Exists(u => u.Id == connectedId) && _users.Exists(u => u.Id == contact.Id))
+            if ( _users.Exists(u => u.Id == connectedId))
             {
                 _users.FirstOrDefault(u => u.Id == connectedId).Contacts.Add(contact);
                 _chats.Add(new Chat() { Id = _chats.Count() + 1, User1 = connectedId, User2 = contact.Id, Messages = new List<Message>() });
@@ -244,6 +244,13 @@ namespace noam2.Service
             chat.Messages.Remove(GetMessageById(connectContactId, destContactId, messageId));
 
             return 1;
+        }
+
+        public int InviteContact(string from, string to, string server)
+        {
+            _users.Add(null);
+            return CreateContact(to, new Contact() { Id = from, Name = from, Server = server, Last = "", Lastdate = "" });
+
         }
 
         /////////////////////////////////////////////////////////////

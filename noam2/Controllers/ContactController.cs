@@ -184,6 +184,8 @@ namespace noam2.Controllers
         }
 
 
+        //************************************************Our Functions*****************************************
+
         // Get: Contact/User
         [HttpGet("User")]
         public ActionResult GetUser()

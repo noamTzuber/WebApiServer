@@ -28,6 +28,8 @@ namespace noam2.Controllers
 
         public List<Chat> GetChats(string id);
 
+        public int InviteContact(string from, string to,string server);
+
         public User GetUserById(string id);
 
 
