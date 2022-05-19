@@ -19,16 +19,18 @@ namespace noam2.Controllers
         public int UpdateMessageById(string connectContactId,  string destContactId, int messageId, string message);
         public int DeleteMessageById(string connectContactId, string destContactId, int messageId);
 
+        public int TransferMessage(string from, string to, string content);
+        public int InviteContact(string from, string to, string server);
+
+
         ////////////////////////////////////////
-        ///
+
         public User GetUser(string id);
         public List<User> GetAllUsers();
 
         public int CreateUser(User user);
 
         public List<Chat> GetChats(string id);
-
-        public int InviteContact(string from, string to,string server);
 
         public User GetUserById(string id);
 

@@ -18,7 +18,7 @@ namespace noam2.Service
             Id = "yossi", 
             Name = "yos", 
             Password = "123456789", 
-            Server = "local1234", 
+            Server = "localhost:1234", 
             Contacts = new List<Contact> { }
         };
 
@@ -27,7 +27,7 @@ namespace noam2.Service
             Id = "noam",
             Name = "nono",
             Password = "123456789",
-            Server = "local1234",
+            Server = "localhost:1234",
             Contacts = new List<Contact> { }
         };
 
@@ -36,7 +36,7 @@ namespace noam2.Service
             Id = "david",
             Name = "david",
             Password = "123456789",
-            Server = "local1234",
+            Server = "localhost:1234",
             Contacts = new List<Contact> { }
         };
 
@@ -46,7 +46,7 @@ namespace noam2.Service
         {
             Id = "noam",
             Name = "nono",
-            Server = "localHost 123",
+            Server = "localhost:1234",
             Last = "22",
             Lastdate = ""
         };
@@ -54,7 +54,7 @@ namespace noam2.Service
         {
             Id = "itay",
             Name = "itay",
-            Server = "localHost 123",
+            Server = "localhost:1234",
             Last = "11",
             Lastdate = ""
         };
@@ -109,6 +109,11 @@ namespace noam2.Service
             if ( _users.Exists(u => u.Id == connectedId))
             {
                 _users.FirstOrDefault(u => u.Id == connectedId).Contacts.Add(contact);
+
+                if (_chats.Exists(chat => (chat.User1 == connectedId && chat.User2 == contact.Id) || (chat.User2 == connectedId && chat.User1 == contact.Id)))
+                {
+                    return 1;
+                }
                 _chats.Add(new Chat() { Id = _chats.Count() + 1, User1 = connectedId, User2 = contact.Id, Messages = new List<Message>() });
                 return 1;
             }
@@ -251,6 +256,11 @@ namespace noam2.Service
         {
             return CreateContact(to, new Contact() { Id = from, Name = from, Server = server, Last = "", Lastdate = "" });
 
+        }
+
+        public int TransferMessage(string from, string to, string content)
+        {
+            return CreateMessage(from, to , content);
         }
 
         /////////////////////////////////////////////////////////////

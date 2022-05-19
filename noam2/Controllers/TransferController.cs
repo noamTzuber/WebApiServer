@@ -14,7 +14,7 @@ namespace noam2.Controllers
         {
             _contactsService = contactsService;
         }
-        public class TransferMessage
+        public class TransferMessageObject
         {
             public string From { get; set; }
             public string To { get; set; }
@@ -22,12 +22,12 @@ namespace noam2.Controllers
 
         }
 
-        // Post: Contact/{id}/messages
-        [HttpPost("{id}/messages")]
-        public ActionResult CreateMessage(string id, [Bind("From,To,Content")] TransferMessage transferMessage)
+        // Post:transfer/
+        [HttpPost]
+        public ActionResult TransferMessage([Bind("From,To,Content")] TransferMessageObject transferMessageObject)
         {
-            int isCreated = _contactsService.CreateMessage(transferMessage.From, id, transferMessage.Content);
-            if (isCreated == 1)
+            int isTransfered = _contactsService.TransferMessage(transferMessageObject.From, transferMessageObject.To, transferMessageObject.Content);
+            if (isTransfered == 1)
             {
                 return StatusCode(201);
             }
