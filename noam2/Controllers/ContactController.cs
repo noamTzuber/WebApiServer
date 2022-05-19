@@ -27,7 +27,6 @@ namespace noam2.Controllers
 
         public class ContactUpdateData
         {
-            public string ConnectedId { get; set; }
 
             public string Name { get; set; }
             public string Server { get; set; }
@@ -35,7 +34,6 @@ namespace noam2.Controllers
         }
         public class ContactCreate
         {
-            public string ConnectedId { get; set; }
             public string Id { get; set; }
             public string Name { get; set; }
             public string Server { get; set; }
@@ -45,7 +43,6 @@ namespace noam2.Controllers
         
         public class MessageData
         {
-            public string ConnectedId { get; set; }
             public string Content { get; set; }
           
         }
@@ -61,10 +58,10 @@ namespace noam2.Controllers
 
         // Post: Contact/
         [HttpPost]
-        public ActionResult CreateContact([Bind("ConnectedId,Id,Name,Server")] ContactCreate contactCreate)
+        public ActionResult CreateContact(string connectedId ,[Bind("Id,Name,Server")] ContactCreate contactCreate)
         {
             Contact contact = new Contact() { Id = contactCreate.Id, Name = contactCreate.Name, Server = contactCreate.Server, Last = "", Lastdate = "" };
-            int isCreates=_contactsService.CreateContact(contactCreate.ConnectedId, contact);
+            int isCreates=_contactsService.CreateContact(connectedId, contact);
             if (isCreates == 1)
             {
                 return NoContent();
@@ -73,12 +70,12 @@ namespace noam2.Controllers
 
         }
 
-        // Get: Contact/
+        // Get: Contact?connectedId={connectedId}
         [HttpGet]
-        public ActionResult GetAllContacts()
+        public ActionResult GetAllContacts(string connectedId)
         {
             
-            List<Contact> contacts=_contactsService.GetAllContacts(whoConnected());
+            List<Contact> contacts=_contactsService.GetAllContacts(connectedId);
             if(contacts == null)
             {
                 return StatusCode(401);
@@ -86,11 +83,11 @@ namespace noam2.Controllers
             return Json(contacts);
         }
 
-        // Get: Contact/{id}
+        // Get: Contact/{id}?connectedId={connectedId}
         [HttpGet("{id}")]
-        public ActionResult GetContact(string id)
+        public ActionResult GetContact(string id, string connectedId)
         {
-            Contact contact = _contactsService.GetContact(whoConnected(), id);
+            Contact contact = _contactsService.GetContact(connectedId, id);
             if (contact == null)
             {
                 return NotFound();
@@ -98,11 +95,11 @@ namespace noam2.Controllers
             return Json(contact);
         }
 
-        // Put: Contact/{id}
+        // Put: Contact/{id}?connectedId={connectedId}
         [HttpPut("{id}")]
-        public ActionResult UpdateContact(string id,[Bind("ConnectedId,Name,Server")] ContactUpdateData contactUpdateData)
+        public ActionResult UpdateContact(string id,string connectedId,[Bind("Name,Server")] ContactUpdateData contactUpdateData)
         {
-            int isUpdate=_contactsService.UpdateContact(contactUpdateData.ConnectedId, id, contactUpdateData.Name, contactUpdateData.Server);
+            int isUpdate=_contactsService.UpdateContact(connectedId, id, contactUpdateData.Name, contactUpdateData.Server);
            if (isUpdate == 1)
             {
                 return NoContent();
@@ -110,11 +107,11 @@ namespace noam2.Controllers
             return StatusCode(401);
         }
 
-        // Delete: Contact/{id}
+        // Delete: Contact/{id}?connectedId={connectedId}
         [HttpDelete("{id}")]
-        public ActionResult DeleteContact(string id, [Bind("ConnectedId")] ConnectedId connectedId)
+        public ActionResult DeleteContact(string id,string connectedId)
         {
-            int isDelete= _contactsService.DeleteContact(connectedId.connectedId, id);
+            int isDelete= _contactsService.DeleteContact(connectedId, id);
             if (isDelete == 1)
             {
                 return NoContent();
@@ -126,11 +123,11 @@ namespace noam2.Controllers
 
 
 
-        // Post: Contact/{id}/messages
+        // Post: Contact/{id}/messages?connectedId={connectedId}
         [HttpPost("{id}/messages")]
-        public ActionResult CreateMessage(string id, [Bind("ConnectedId,Content")] MessageData createMessage)
+        public ActionResult CreateMessage(string id,string connectedId, [Bind("Content")] MessageData createMessage)
         {
-            int isCreated= _contactsService.CreateMessage(createMessage.ConnectedId, id, createMessage.Content);
+            int isCreated= _contactsService.CreateMessage(connectedId, id, createMessage.Content);
             if (isCreated == 1)
             {
                 return StatusCode(201);
@@ -138,11 +135,11 @@ namespace noam2.Controllers
             return StatusCode(401);
         }
 
-        // Get: Contact/{id}/messages/{id2}
+        // Get: Contact/{id}/messages/{id2}?connectedId={connectedId}
         [HttpGet("{id}/messages/{id2}")]
-        public ActionResult GetMessageById(string id, int id2)
+        public ActionResult GetMessageById(string id, int id2, string connectedId)
         {
-            Message message=_contactsService.GetMessageById(whoConnected(), id, id2);
+            Message message=_contactsService.GetMessageById(connectedId, id, id2);
             if (message != null)
             {
                 return Json(message);
@@ -151,11 +148,11 @@ namespace noam2.Controllers
         }
 
 
-        // Get: Contact/{id}/messages
+        // Get: Contact/{id}/messages?connectedId={connectedId}
         [HttpGet("{id}/messages")]
-        public ActionResult GetAllMessages(string id)
+        public ActionResult GetAllMessages(string id, string connectedId)
         {
-            List<Message> messages=_contactsService.GetAllMessages(whoConnected(), id);
+            List<Message> messages=_contactsService.GetAllMessages(connectedId, id);
             if (messages != null)
             {
                 return Json(messages);
@@ -165,9 +162,9 @@ namespace noam2.Controllers
 
 
         [HttpPut("{id}/messages/{id2}")]
-        public ActionResult UpdateMessageById(string id, int id2, [Bind("ConnectedId,Content")] MessageData message)
+        public ActionResult UpdateMessageById(string id, int id2,string connectedId, [Bind("Content")] MessageData message)
         {
-            int isUpdate=_contactsService.UpdateMessageById(message.ConnectedId, id, id2, message.Content);
+            int isUpdate=_contactsService.UpdateMessageById(connectedId, id, id2, message.Content);
             if (isUpdate == 1)
             {
                 return NoContent();
@@ -176,9 +173,9 @@ namespace noam2.Controllers
         }
 
         [HttpDelete("{id}/messages/{id2}")]
-        public ActionResult DeleteMessageById([Bind("ConnectedId")] ConnectedId connectedId,string id, int id2)
+        public ActionResult DeleteMessageById(string connectedId,string id, int id2)
         {
-            int isDelete= _contactsService.DeleteMessageById(connectedId.connectedId, id, id2);
+            int isDelete= _contactsService.DeleteMessageById(connectedId, id, id2);
             if (isDelete == 1)
             {
                 return NoContent();
@@ -189,11 +186,11 @@ namespace noam2.Controllers
 
         //************************************************Our Functions*****************************************
 
-        // Get: Contact/User
+        // Get: Contact/User?connectedId={connectedId}
         [HttpGet("User")]
-        public ActionResult GetUser()
+        public ActionResult GetUser(string connectedId)
         {
-            User user = _contactsService.GetUser(whoConnected());
+            User user = _contactsService.GetUser(connectedId);
             if (user != null)
             {
                 return Json(user);
@@ -211,11 +208,11 @@ namespace noam2.Controllers
 
 
 
-        // Get: Contact/User
+        // Get: Contact/User?connectedId={connectedId}
         [HttpGet("Chats")]
-        public ActionResult GetChats()
+        public ActionResult GetChats(string connectedId)
         {
-            return Json( _contactsService.GetChats(whoConnected()));
+            return Json( _contactsService.GetChats(connectedId));
            
         }
 
@@ -230,20 +227,6 @@ namespace noam2.Controllers
                 return NoContent();
             }
             return StatusCode(401);
-
         }
-        // Get: Contact/User
-        [HttpGet("User{id}")]
-        public ActionResult GetUser(string id)
-        {
-            User user = _contactsService.GetUser(id);
-            if (user != null)
-            {
-                return Json(user);
-            }
-            return NotFound();
-        }
-
-
     }
 }
