@@ -227,7 +227,17 @@ namespace noam2.Controllers
             return StatusCode(401);
 
         }
-
+        // Get: Contact/User
+        [HttpGet("User{id}")]
+        public ActionResult GetUser(string id)
+        {
+            User user = _contactsService.GetUser(id);
+            if (user != null)
+            {
+                return Json(user);
+            }
+            return NotFound();
+        }
 
 
     }

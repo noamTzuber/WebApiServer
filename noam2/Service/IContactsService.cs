@@ -28,6 +28,7 @@ namespace noam2.Controllers
 
         public List<Chat> GetChats(string id);
 
+        public User GetUserById(string id);
 
 
     }

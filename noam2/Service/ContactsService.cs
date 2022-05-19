@@ -30,6 +30,15 @@ namespace noam2.Service
             Contacts = new List<Contact> { }
         };
 
+        User david = new User()
+        {
+            Id = "david",
+            Name = "david",
+            Password = "123456789",
+            Server = "local1234",
+            Contacts = new List<Contact> { }
+        };
+
 
 
         public Contact noamTheContact = new Contact()
@@ -70,6 +79,7 @@ namespace noam2.Service
         {
             _users.Add(yossi);
             _users.Add(noam);
+            _users.Add(david);
             yossi.Contacts.Add(noamTheContact);
             yossi.Contacts.Add(itayTheContact);
 
@@ -94,9 +104,11 @@ namespace noam2.Service
 
         public int CreateContact(string connectedId,Contact contact)
         {
-            if ( _users.Exists(u => u.Id == connectedId))
+            
+            if ( _users.Exists(u => u.Id == connectedId) && _users.Exists(u => u.Id == contact.Id))
             {
                 _users.FirstOrDefault(u => u.Id == connectedId).Contacts.Add(contact);
+                _chats.Add(new Chat() { Id = _chats.Count() + 1, User1 = connectedId, User2 = contact.Id, Messages = new List<Message>() });
                 return 1;
             }
             return 0;
@@ -141,8 +153,12 @@ namespace noam2.Service
 
             int id = chat.Messages.Count() + 1;
             bool sent = chat.User1 == connectContactId;
-            Message message = new() { Id = id, Sent = sent, Created = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff"), Content = content };
+            string date = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff");
+            Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
             chat.Messages.Add(message);
+
+            _users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId).Last = content;
+            _users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId).Lastdate = date;
             return 1;
         }
 
@@ -261,6 +277,17 @@ namespace noam2.Service
    
             return 1;
         }
+
+        public User GetUserById(string id)
+        {
+            User user = _users.FirstOrDefault(c => c.Id == id);
+            if (user != null)
+            {
+                return user;
+            }
+            return null;
+        }
+
 
     }
 }
