@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using noam2.Controllers;
 using noam2.Model;
+
 using static noam2.Controllers.ContactController;
 
 namespace noam2.Service
@@ -248,7 +249,6 @@ namespace noam2.Service
 
         public int InviteContact(string from, string to, string server)
         {
-            _users.Add(null);
             return CreateContact(to, new Contact() { Id = from, Name = from, Server = server, Last = "", Lastdate = "" });
 
         }

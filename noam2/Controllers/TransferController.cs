@@ -9,7 +9,11 @@ namespace noam2.Controllers
     [Route("api/[controller]")]
     public class TransferController : Controller
     {
-        private static IContactsService _contactsService = new ContactsService();
+        private static IContactsService _contactsService;
+        public TransferController(ContactsService contactsService)
+        {
+            _contactsService = contactsService;
+        }
         public class TransferMessage
         {
             public string From { get; set; }

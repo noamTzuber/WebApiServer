@@ -9,8 +9,11 @@ namespace noam2.Controllers
     [Route("api/[controller]")]
     public class ContactController : Controller
     {
-        private static IContactsService _contactsService = new ContactsService();
-
+        private static IContactsService _contactsService;
+        public ContactController(ContactsService contactsService)
+        {
+            _contactsService = contactsService;
+        }
         private string GetConnectedId()
         {
             return "yossi";

@@ -9,7 +9,11 @@ namespace noam2.Controllers
     [Route("api/[controller]")]
     public class InvitationsController : Controller
     {
-        private static IContactsService _contactsService = new ContactsService();
+        private static IContactsService _contactsService;
+        public InvitationsController(ContactsService contactsService)
+        {
+            _contactsService = contactsService;
+        }
         public class InvitationsMessage
         {
             public string From { get; set; }
