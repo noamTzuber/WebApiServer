@@ -1,3 +1,4 @@
+using Chatty.Api.Hubs;
 using noam2.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,12 +10,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSignalR();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Allow All",
     builder =>
     {
-        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials().SetIsOriginAllowed(x =>true);
     });
 });
 
@@ -33,4 +36,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapHub<ChatHub>("/Hub/ChatHub");
 app.Run();

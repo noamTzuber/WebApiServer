@@ -163,8 +163,12 @@ namespace noam2.Service
             Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
             chat.Messages.Add(message);
 
-            _users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId).Last = content;
-            _users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId).Lastdate = date;
+            Contact lastContact = _users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId);
+            if (lastContact != null) {
+                lastContact.Last = content;
+                lastContact.Lastdate = date;
+            }
+            //_users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId).Lastdate = date;
             return 1;
         }
 
