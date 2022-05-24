@@ -1,5 +1,7 @@
+using Chatty.Api.Hubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using noam2.Model;
 using noam2.Service;
 
@@ -10,9 +12,13 @@ namespace noam2.Controllers
     public class InvitationsController : Controller
     {
         private static IContactsService _contactsService;
-        public InvitationsController(ContactsService contactsService)
+        IHubContext<ChatHub> hub;
+
+        public InvitationsController(ContactsService contactsService, IHubContext<ChatHub> hub) 
+
         {
             _contactsService = contactsService;
+            this.hub = hub;
         }
         public class InvitationsMessage
         {
@@ -24,11 +30,12 @@ namespace noam2.Controllers
 
         
         [HttpPost]
-        public ActionResult InviteContact( [Bind("From,To,Server")] InvitationsMessage invitationsMessage)
+        public async Task<IActionResult> InviteContact( [Bind("From,To,Server")] InvitationsMessage invitationsMessage)
         {
             int isInvited = _contactsService.InviteContact(invitationsMessage.From, invitationsMessage.To, invitationsMessage.Server);
             if (isInvited == 1)
             {
+                await hub.Clients.All.SendAsync("ContactAdded", invitationsMessage.From, invitationsMessage.From, invitationsMessage.Server, invitationsMessage.From, invitationsMessage.To);
                 return StatusCode(201);
             }
             return StatusCode(401);
