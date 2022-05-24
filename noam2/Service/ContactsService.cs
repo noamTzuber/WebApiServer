@@ -39,6 +39,23 @@ namespace noam2.Service
             Server = "localhost:1234",
             Contacts = new List<Contact> { }
         };
+        User dvir = new User()
+        {
+            Id = "dvir",
+            Name = "dvir",
+            Password = "123456789",
+            Server = "localhost:1234",
+            Contacts = new List<Contact> { }
+        };
+
+        User dani = new User()
+        {
+            Id = "dani",
+            Name = "dani",
+            Password = "123456789",
+            Server = "localhost:1234",
+            Contacts = new List<Contact> { }
+        };
 
 
 
@@ -81,6 +98,9 @@ namespace noam2.Service
             _users.Add(yossi);
             _users.Add(noam);
             _users.Add(david);
+            _users.Add(dani);
+            _users.Add(dvir);
+
             yossi.Contacts.Add(noamTheContact);
             yossi.Contacts.Add(itayTheContact);
 
