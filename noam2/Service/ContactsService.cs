@@ -78,31 +78,12 @@ namespace noam2.Service
 
         private static readonly List<User> _users = new List<User>() { };
 
-        private static readonly List<Chat> _chats = new List<Chat>(){
-            new Chat(){Id=1,
-                       User1="noam",
-                       User2="yossi" ,
-                       Messages = new List<Message>(){new Message(){Id=1,Content="hello harry",Sent=true, Created="10:10"}
-                       }
-                       },
-            new Chat(){Id=2,
-                       User1="yossi",
-                       User2="itay" ,
-                       Messages = new List<Message>(){new Message(){Id=1,Content="hello ron",Sent=false, Created="10:10"}
-                       }
-                       }
-        };
+        private static readonly List<Chat> _chats = new List<Chat>(){ };
 
         public ContactsService()
         {
-            _users.Add(yossi);
-            _users.Add(noam);
-            _users.Add(david);
-            _users.Add(dani);
-            _users.Add(dvir);
+  
 
-            yossi.Contacts.Add(noamTheContact);
-            yossi.Contacts.Add(itayTheContact);
 
         }
 
