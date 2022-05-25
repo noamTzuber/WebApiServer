@@ -15,7 +15,7 @@ namespace noam2.Controllers
             _contactsService = contactsService;
         }
    
-        //************************************** Contacts ******************************************//
+        //************************************** Contacts *****************************in*************//
 
         // Post: Contact/
         [HttpPost]
@@ -25,7 +25,7 @@ namespace noam2.Controllers
             int isCreates=_contactsService.CreateContact(connectedId, contact);
             if (isCreates == 1)
             {
-                return NoContent();
+                return StatusCode(201);
             }
             return StatusCode(401);
 
@@ -75,7 +75,7 @@ namespace noam2.Controllers
             int isDelete= _contactsService.DeleteContact(connectedId, id);
             if (isDelete == 1)
             {
-                return NoContent();
+                return StatusCode(204);
             }
             return StatusCode(401);
         }
@@ -128,7 +128,7 @@ namespace noam2.Controllers
             int isUpdate=_contactsService.UpdateMessageById(connectedId, id, id2, message.Content);
             if (isUpdate == 1)
             {
-                return NoContent();
+                return StatusCode(204);
             }
             return NotFound();
         }

@@ -83,7 +83,7 @@ namespace noam2.Service
         public ContactsService()
         {
   
-
+            _users.Add(yossi);
 
         }
 
@@ -106,10 +106,11 @@ namespace noam2.Service
 
         public int CreateContact(string connectedId,Contact contact)
         {
-            
-            if ( _users.Exists(u => u.Id == connectedId))
+            User user = _users.FirstOrDefault(u => u.Id == connectedId);
+
+            if (user != null && user.Contacts.FirstOrDefault(u => u.Id == contact.Id) == null)
             {
-                _users.FirstOrDefault(u => u.Id == connectedId).Contacts.Add(contact);
+                      user.Contacts.Add(contact);
 
                 if (_chats.Exists(chat => (chat.User1 == connectedId && chat.User2 == contact.Id) || (chat.User2 == connectedId && chat.User1 == contact.Id)))
                 {
@@ -157,19 +158,42 @@ namespace noam2.Service
             {
                 return 0;
             }
-
-            int id = chat.Messages.Count() + 1;
+            int id;
+            if (chat.Messages.Count() == 0)
+            {
+                id = 0;
+            }
+            else
+            {
+                id = chat.Messages[chat.Messages.Count()-1].Id + 1;
+            }
+            
             bool sent = chat.User1 == connectContactId;
             string date = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff");
             Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
             chat.Messages.Add(message);
 
-            Contact contact = _users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId);
+
+            User user1 = _users.FirstOrDefault(u => u.Id == connectContactId);
+            if(user1 == null)
+            {
+                return 0;
+            }
+
+            Contact contact = user1.Contacts.FirstOrDefault(x => x.Id == destContactId);
             if (contact != null) {
                 contact.Last = content;
                 contact.Lastdate = date;
             }
-            contact = _users.FirstOrDefault(x => x.Id == destContactId).Contacts.FirstOrDefault(x => x.Id == connectContactId);
+
+
+            User user2 = _users.FirstOrDefault(x => x.Id == destContactId);
+            if (user2 == null && user1.Contacts.Exists(u => u.Id == destContactId))
+            {
+                return 1;
+            }
+
+            contact = user2.Contacts.FirstOrDefault(x => x.Id == connectContactId);
             if (contact != null)
             {
                 contact.Last = content;
@@ -240,8 +264,37 @@ namespace noam2.Service
             {
                 return 0;
             }
+            // change the last message for contact if it match
+            if(mess.Id == chat.Messages[chat.Messages.Count() - 1].Id)
+            {
+                User us1 = _users.FirstOrDefault(u => u.Id == chat.User1);
+                User us2 = _users.FirstOrDefault(u => u.Id == chat.User2);
+                if (us1 != null)
+                {
+                    Contact co1 = us1.Contacts.FirstOrDefault(u => u.Id == chat.User1);
+                    if (co1 != null)
+                    {
+                        co1.Last = message;
+                        co1.Lastdate = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff");
+
+
+                    }
+                }
+                if (us2 != null)
+                {
+                    Contact co2 = us2.Contacts.FirstOrDefault(u => u.Id == chat.User2);
+                    if (co2 != null)
+                    {
+                        co2.Last = message;
+                        co2.Lastdate = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff");
+                    }
+                }
+
+
+                }
             mess.Content = message;
-            return 0;
+            
+            return 1;
 
         }
 
@@ -259,7 +312,7 @@ namespace noam2.Service
                 return 0;
             };
 
-            chat.Messages.Remove(GetMessageById(connectContactId, destContactId, messageId));
+            chat.Messages.Remove(chat.Messages.FirstOrDefault(m => m.Id == messageId));
 
             return 1;
         }
@@ -272,7 +325,32 @@ namespace noam2.Service
 
         public int TransferMessage(string from, string to, string content)
         {
-            return CreateMessage(from, to , content);
+            Chat chat = _chats.FirstOrDefault(c => (c.User1 == from && c.User2 == to) || c.User2 == from && c.User1 == to);
+            if (chat == null)
+            {
+                return 0;
+            }
+
+            int id = chat.Messages.Count() + 1;
+            bool sent = chat.User1 == from;
+            string date = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff");
+            Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
+            chat.Messages.Add(message);
+
+
+            User user1 = _users.FirstOrDefault(u => u.Id == to);
+            if (user1 == null)
+            {
+                return 0;
+            }
+
+            Contact contact = user1.Contacts.FirstOrDefault(x => x.Id == from);
+            if (contact != null)
+            {
+                contact.Last = content;
+                contact.Lastdate = date;
+            }
+              return 1;
         }
 
         /////////////////////////////////////////////////////////////
@@ -280,7 +358,7 @@ namespace noam2.Service
 
         public User GetUser(string id)
         {
-            foreach (var user in _users)
+                foreach (var user in _users)
             {
                 if (user.Id == id)
                 {
