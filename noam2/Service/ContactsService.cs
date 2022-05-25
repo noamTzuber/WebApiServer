@@ -183,11 +183,18 @@ namespace noam2.Service
             Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
             chat.Messages.Add(message);
 
-            Contact lastContact = _users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId);
-            if (lastContact != null) {
-                lastContact.Last = content;
-                lastContact.Lastdate = date;
+            Contact contact = _users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId);
+            if (contact != null) {
+                contact.Last = content;
+                contact.Lastdate = date;
             }
+            contact = _users.FirstOrDefault(x => x.Id == destContactId).Contacts.FirstOrDefault(x => x.Id == connectContactId);
+            if (contact != null)
+            {
+                contact.Last = content;
+                contact.Lastdate = date;
+            }
+
             //_users.FirstOrDefault(x => x.Id == connectContactId).Contacts.FirstOrDefault(x => x.Id == destContactId).Lastdate = date;
             return 1;
         }
