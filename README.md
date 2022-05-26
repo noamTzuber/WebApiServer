@@ -15,7 +15,9 @@ The server use **signalR** to tell to the contacts about new changes without the
  
  # Libraries we used
  @microsoft/signalr
+ 
  Microsoft.AspNetCore.Mvc
+ 
  using Microsoft.AspNetCore.SignalR;
 
 
