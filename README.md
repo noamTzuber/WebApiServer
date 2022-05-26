@@ -8,7 +8,9 @@ http://localhost:1234/api/contacts/{Alice} will return all the contacts of Alice
 
 The server use **signalR** to tell to the contacts about new changes without the users need to pull update from the server.
 
-![image](https://user-images.githubusercontent.com/71848366/170559840-64e46321-8883-430d-866a-460b62d82dd3.png)
+
+![image](https://user-images.githubusercontent.com/71848366/170560165-59b937f3-cc0f-4b7e-9911-3013687b54bc.png)
+
 
 # Build with
  mvc asp.net
