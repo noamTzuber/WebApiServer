@@ -9,11 +9,11 @@ namespace noam2.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TransferController : Controller
+    public class transferController : Controller
     {
         private static IContactsService _contactsService;
         IHubContext<ChatHub> hub;
-        public TransferController(ContactsService contactsService, IHubContext<ChatHub> hub)
+        public transferController(ContactsService contactsService, IHubContext<ChatHub> hub)
         {
             _contactsService = contactsService;
             this.hub = hub;

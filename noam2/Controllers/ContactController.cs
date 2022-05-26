@@ -7,10 +7,10 @@ namespace noam2.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ContactController : Controller
+    public class contactsController : Controller
     {
         private static IContactsService _contactsService;
-        public ContactController(ContactsService contactsService)
+        public contactsController(ContactsService contactsService)
         {
             _contactsService = contactsService;
         }

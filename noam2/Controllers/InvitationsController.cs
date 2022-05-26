@@ -9,12 +9,12 @@ namespace noam2.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class InvitationsController : Controller
+    public class invitationsController : Controller
     {
         private static IContactsService _contactsService;
         IHubContext<ChatHub> hub;
 
-        public InvitationsController(ContactsService contactsService, IHubContext<ChatHub> hub) 
+        public invitationsController(ContactsService contactsService, IHubContext<ChatHub> hub) 
 
         {
             _contactsService = contactsService;

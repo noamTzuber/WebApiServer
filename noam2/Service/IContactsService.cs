@@ -1,5 +1,5 @@
 ﻿using noam2.Model;
-using static noam2.Controllers.ContactController;
+using static noam2.Controllers.contactsController;
 
 namespace noam2.Controllers
 {

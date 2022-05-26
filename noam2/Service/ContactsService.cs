@@ -2,7 +2,7 @@
 using noam2.Controllers;
 using noam2.Model;
 
-using static noam2.Controllers.ContactController;
+using static noam2.Controllers.contactsController;
 
 namespace noam2.Service
 {
@@ -17,7 +17,7 @@ namespace noam2.Service
         User yossi = new User() { 
             Id = "yossi", 
             Name = "yos", 
-            Password = "123456789", 
+            Password = "yossi1234", 
             Server = "localhost:1234", 
             Contacts = new List<Contact> { }
         };
