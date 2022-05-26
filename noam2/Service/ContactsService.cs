@@ -101,7 +101,11 @@ namespace noam2.Service
 
 
         {
-             return _users.FirstOrDefault(u => u.Id == connectContactId).Contacts.FirstOrDefault(c => c.Id == contactId);
+            if (_users.FirstOrDefault(u => u.Id == connectContactId) != null)
+            {
+                return _users.FirstOrDefault(u => u.Id == connectContactId).Contacts.FirstOrDefault(c => c.Id == contactId);
+            }
+            return null;
         }
 
         public int CreateContact(string connectedId,Contact contact)
@@ -125,7 +129,10 @@ namespace noam2.Service
 
         public int UpdateContact(string connectContactId,string destId,string Name,string Server)
         {
-            
+            if(_users.FirstOrDefault(u => u.Id == connectContactId) == null)
+            {
+                return 0;
+            }
             Contact c = _users.FirstOrDefault(u => u.Id == connectContactId).Contacts.FirstOrDefault(c => c.Id ==destId);
             if(c == null)
             {
@@ -139,8 +146,11 @@ namespace noam2.Service
 
         public int DeleteContact(string connectContactId, string contactId)
         {
-     
-            
+            if (_users.FirstOrDefault(u => u.Id == connectContactId) == null)
+            {
+                return 0;
+            }
+
             Contact contact =_users.FirstOrDefault(u => u.Id == connectContactId).Contacts.FirstOrDefault(u=>u.Id==contactId);
             if (contact == null)
             {
@@ -271,7 +281,7 @@ namespace noam2.Service
                 User us2 = _users.FirstOrDefault(u => u.Id == chat.User2);
                 if (us1 != null)
                 {
-                    Contact co1 = us1.Contacts.FirstOrDefault(u => u.Id == chat.User1);
+                    Contact co1 = us1.Contacts.FirstOrDefault(u => u.Id == chat.User2);
                     if (co1 != null)
                     {
                         co1.Last = message;
@@ -282,7 +292,7 @@ namespace noam2.Service
                 }
                 if (us2 != null)
                 {
-                    Contact co2 = us2.Contacts.FirstOrDefault(u => u.Id == chat.User2);
+                    Contact co2 = us2.Contacts.FirstOrDefault(u => u.Id == chat.User1);
                     if (co2 != null)
                     {
                         co2.Last = message;
@@ -331,7 +341,15 @@ namespace noam2.Service
                 return 0;
             }
 
-            int id = chat.Messages.Count() + 1;
+            int id;
+            if (chat.Messages.Count() == 0)
+            {
+                id = 0;
+            }
+            else
+            {
+                id = chat.Messages[chat.Messages.Count() - 1].Id + 1;
+            }
             bool sent = chat.User1 == from;
             string date = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff");
             Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
@@ -358,11 +376,10 @@ namespace noam2.Service
 
         public User GetUser(string id)
         {
-                foreach (var user in _users)
-            {
+            foreach (var user in _users) {
                 if (user.Id == id)
                 {
-                    return user;
+                        return user;
                 }
             }
             return null;
@@ -394,7 +411,5 @@ namespace noam2.Service
             }
             return null;
         }
-
-
     }
 }
