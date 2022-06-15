@@ -370,7 +370,22 @@ namespace noam2.Service
                 contact.Last = content;
                 contact.Lastdate = date;
             }
-              return 1;
+
+            User user2 = _users.FirstOrDefault(u => u.Id == from);
+            if (user2 == null)
+            {
+                return 1;
+            }
+
+            Contact contact2 = user2.Contacts.FirstOrDefault(x => x.Id == to);
+            if (contact2 != null)
+            {
+                contact2.Last = content;
+                contact2.Lastdate = date;
+            }
+
+
+            return 1;
         }
 
         /////////////////////////////////////////////////////////////
