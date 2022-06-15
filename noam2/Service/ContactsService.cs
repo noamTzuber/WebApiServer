@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FirebaseAdmin;
+using FirebaseAdmin.Messaging;
+using Microsoft.AspNetCore.Mvc;
 using noam2.Controllers;
 using noam2.Model;
+using Google.Apis.Auth.OAuth2;
 
 using static noam2.Controllers.contactsController;
 
@@ -124,7 +127,7 @@ namespace noam2.Service
                 {
                     return 1;
                 }
-                _chats.Add(new Chat() { Id = _chats.Count() + 1, User1 = connectedId, User2 = contact.Id, Messages = new List<Message>() });
+                _chats.Add(new Chat() { Id = _chats.Count() + 1, User1 = connectedId, User2 = contact.Id, Messages = new List<Model.Message>() });
                 return 1;
             }
             return 0;
@@ -184,7 +187,7 @@ namespace noam2.Service
             
             bool sent = chat.User1 == connectContactId;
             string date = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff");
-            Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
+            Model.Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
             chat.Messages.Add(message);
 
 
@@ -218,7 +221,7 @@ namespace noam2.Service
             return 1;
         }
 
-        public Message GetMessageById(string connectContactId, string destContactId, int messageId)
+        public Model.Message GetMessageById(string connectContactId, string destContactId, int messageId)
         {
             Chat chat = _chats.FirstOrDefault(c => (c.User1 == connectContactId && c.User2 == destContactId) || c.User2 == connectContactId && c.User1 == destContactId);
             if (chat == null)
@@ -226,7 +229,7 @@ namespace noam2.Service
                 return null;
             }
 
-            Message message= chat.Messages.FirstOrDefault(m => m.Id == messageId);
+            Model.Message message = chat.Messages.FirstOrDefault(m => m.Id == messageId);
             if (message == null)
             {
                 return null;
@@ -237,12 +240,12 @@ namespace noam2.Service
                 return message;
             }
             // for changing the sent fiels to the oposite value
-            return new Message() { Id = messageId, Content = message.Content, Created = message.Created, Sent = false };
+            return new Model.Message() { Id = messageId, Content = message.Content, Created = message.Created, Sent = false };
             }
             
         
 
-        public List<Message> GetAllMessages(string connectContactId, string destContactId)
+        public List<Model.Message> GetAllMessages(string connectContactId, string destContactId)
         {
         Chat chat = _chats.FirstOrDefault(c => (c.User1 == connectContactId && c.User2 == destContactId) || c.User2 == connectContactId && c.User1 == destContactId);
             if (chat == null)
@@ -257,9 +260,9 @@ namespace noam2.Service
             }
 
             // for changing the sent fiels to the oposite value
-            List<Message> messages =new List<Message>();
-                foreach (Message message in chat.Messages) {
-                    messages.Add(new Message() { Id = message.Id, Content = message.Content, Created = message.Created, Sent = !message.Sent });
+            List<Model.Message> messages =new List<Model.Message>();
+                foreach (Model.Message message in chat.Messages) {
+                    messages.Add(new Model.Message() { Id = message.Id, Content = message.Content, Created = message.Created, Sent = !message.Sent });
                 }
             return messages;
         }
@@ -272,7 +275,7 @@ namespace noam2.Service
                 return 0;
             };
 
-            Message mess = chat.Messages.FirstOrDefault(m => m.Id == messageId);
+            Model.Message mess = chat.Messages.FirstOrDefault(m => m.Id == messageId);
 
             if (mess == null)
             {
@@ -320,7 +323,7 @@ namespace noam2.Service
                 return 0;
             };
 
-            Message message =chat.Messages.FirstOrDefault(m=>m.Id == messageId);
+            Model.Message message =chat.Messages.FirstOrDefault(m=>m.Id == messageId);
             if (message == null)
             {
                 return 0;
@@ -356,7 +359,7 @@ namespace noam2.Service
             }
             bool sent = chat.User1 == from;
             string date = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fffffff");
-            Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
+            Model.Message message = new() { Id = id, Sent = sent, Created = date, Content = content };
             chat.Messages.Add(message);
 
 
@@ -385,7 +388,7 @@ namespace noam2.Service
                 contact2.Last = content;
                 contact2.Lastdate = date;
             }
-
+            notifyTransferToAndroidDevicesAsync(to, content);
 
             return 1;
         }
@@ -443,5 +446,45 @@ namespace noam2.Service
             return 1;
         }
 
+        public async Task notifyTransferToAndroidDevicesAsync(String id, String Content)
+        {
+
+            if (FirebaseApp.DefaultInstance == null)
+            {
+                FirebaseApp.Create(new AppOptions()
+                {
+                    Credential = GoogleCredential.FromFile("private_key.json")
+                });
+
+            }
+
+
+            TokenToId isTokenExist = null;
+            isTokenExist = _tokens.FirstOrDefault(t => t.Id == id);
+            if (isTokenExist == null)
+            {
+                return;
+            }
+
+            var registrationToken = isTokenExist.Token;
+
+            // See documentation on defining a message payload.
+            var message = new FirebaseAdmin.Messaging.Message()
+            {
+                Data = new Dictionary<string, string>() { { "ITAY", "NOAM" }},
+                Token = registrationToken,
+                Notification = new Notification() { Title = "this is the title!!", Body = " this is the body!!!"}
+            };
+
+
+
+
+            // Send a message to the device corresponding to the provided
+            // registration token.
+            string response = await FirebaseMessaging.DefaultInstance.SendAsync(message);
+            // Response is a message ID string.
+            Console.WriteLine("Successfully sent message: " + response);
+        }
+       
     }
 }
