@@ -433,7 +433,13 @@ namespace noam2.Service
 
         public int SetToken(TokenToId tokenToId)
         {
-            _tokens.Add(tokenToId);
+
+            TokenToId isTokenExist = null;
+            isTokenExist = _tokens.FirstOrDefault(t => t.Id == tokenToId.Id && t.Token == tokenToId.Token);
+            if(isTokenExist != null)
+            {
+                _tokens.Add(tokenToId);
+            }
             return 1;
         }
 
