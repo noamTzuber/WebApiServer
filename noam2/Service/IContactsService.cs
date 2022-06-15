@@ -34,6 +34,8 @@ namespace noam2.Controllers
 
         public User GetUserById(string id);
 
+        public int SetToken(TokenToId tokenToId);
+
 
     }
 }

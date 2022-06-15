@@ -80,6 +80,8 @@ namespace noam2.Service
 
         private static readonly List<Chat> _chats = new List<Chat>(){ };
 
+        private static readonly List<TokenToId> _tokens = new List<TokenToId>(){ };
+
         public ContactsService()
         {
   
@@ -428,5 +430,12 @@ namespace noam2.Service
             }
             return null;
         }
+
+        public int SetToken(TokenToId tokenToId)
+        {
+            _tokens.Add(tokenToId);
+            return 1;
+        }
+
     }
 }

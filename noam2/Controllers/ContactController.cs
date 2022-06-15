@@ -190,5 +190,18 @@ namespace noam2.Controllers
             }
             return StatusCode(401);
         }
+
+
+        // Post: contacts/SetToken
+        [HttpPost("SetToken")]
+        public ActionResult SetToken([Bind("Id,Token")] TokenToId tokenToId)
+        {
+            int isAdded = _contactsService.SetToken(tokenToId);
+            if (isAdded == 1)
+            {
+                return NoContent();
+            }
+            return StatusCode(401);
+        }
     }
 }
