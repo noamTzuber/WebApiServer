@@ -26,7 +26,7 @@ namespace noam2.Service
         {
             Id = "noam",
             Name = "nono",
-            Password = "123456789",
+            Password = "noam1234",
             Server = "localhost:1234",
             Contacts = new List<Contact> { }
         };
@@ -84,6 +84,8 @@ namespace noam2.Service
         {
   
             _users.Add(yossi);
+            _users.Add(noam);
+            _users.Add(david);
 
         }
 

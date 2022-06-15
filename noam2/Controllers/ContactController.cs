@@ -159,11 +159,12 @@ namespace noam2.Controllers
             return NotFound();
         }
 
-        // Get: Contact/AllUsers
+        // Get: contacts/AllUsers
         [HttpGet("AllUsers")]
         public ActionResult GetAllUsers()
         {
-            return Json(_contactsService.GetAllUsers());
+            var res = Json(_contactsService.GetAllUsers());
+            return res;
             
         }
 
@@ -178,7 +179,7 @@ namespace noam2.Controllers
         }
 
 
-        // Post: Contact/User
+        // Post: contacts/User
         [HttpPost("User")]
         public ActionResult CreateUser([Bind("Id,Name,Password, Server, Contacts")] User user)
         {
