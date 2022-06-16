@@ -1,9 +1,14 @@
 using Chatty.Api.Hubs;
 using noam2.Service;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using noam2.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<noam2Context>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("noam2Context") ?? throw new InvalidOperationException("Connection string 'noam2Context' not found.")));
 
-builder.Services.AddSingleton<ContactsService>(new ContactsService());
+builder.Services.AddSingleton<ServiceDB>(new ServiceDB());
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

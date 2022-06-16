@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using noam2.Model;
 using noam2.Service;
 
@@ -10,8 +11,9 @@ namespace noam2.Controllers
     public class contactsController : Controller
     {
         private static IContactsService _contactsService;
-        public contactsController(ContactsService contactsService)
+        public contactsController(ServiceDB contactsService, DbContext context)
         {
+            contactsService.setDB(context);
             _contactsService = contactsService;
         }
    
